@@ -6,14 +6,15 @@ using UnityEngine.XR;
 public class HandPresence : MonoBehaviour
 {
 
-    private UnityEngine.XR.InputDevice targetDevice;
+    private InputDevice rightHandDevice;
+    private InputDevice leftHandDevice;
 
     // Start is called before the first frame update
     IEnumerator Start()
     {
-        var inputDevices = new List<UnityEngine.XR.InputDevice>();
+        var inputDevices = new List<InputDevice>();
         InputDeviceCharacteristics rightControllerCharacteristics = InputDeviceCharacteristics.Right | InputDeviceCharacteristics.Controller;
-        UnityEngine.XR.InputDevices.GetDevicesWithCharacteristics(rightControllerCharacteristics,inputDevices);
+        //InputDeviceCharacteristics leftControlllerCharacteristics = InputDeviceCharacteristics.Left | InputDeviceCharacteristics.Controller;
 
         Debug.Log("code is running.");
        
@@ -22,18 +23,20 @@ public class HandPresence : MonoBehaviour
             // check for devices every frame until you find one.
             yield return null;
             InputDevices.GetDevicesWithCharacteristics(rightControllerCharacteristics, inputDevices);
+            //InputDevices.GetDevicesWithCharacteristics(leftControlllerCharacteristics, inputDevices);
         }
 
         foreach (var item in inputDevices)
         {
             //   Debug.Log(item.name + item.characteristics);
-            Debug.Log(string.Format("Device found with name '{0}'", item.name));
+            Debug.Log(string.Format(item.name + item.characteristics));
 
         }
 
         if (inputDevices.Count > 0)
         {
-            targetDevice = inputDevices[0];
+            rightHandDevice = inputDevices[0];
+            //leftHandDevice = inputDevices[1];
         }
     }
 
@@ -41,22 +44,28 @@ public class HandPresence : MonoBehaviour
     void Update()
     {
         
-        if (targetDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool primaryButtonValue) && primaryButtonValue)
+        if (rightHandDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool primaryButtonValue) && primaryButtonValue)
         {
-            Debug.Log("Pressing primary button");
+            Debug.Log("Pressing Right primary button");
         }
 
         
-        if(targetDevice.TryGetFeatureValue(CommonUsages.trigger, out float triggerValue) && triggerValue > 0.1f)
+        if(rightHandDevice.TryGetFeatureValue(CommonUsages.trigger, out float triggerValue) && triggerValue > 0.1f)
         {
-            Debug.Log("Trigger pressed" + triggerValue);
+            Debug.Log("Right Trigger pressed" + triggerValue);
         }
 
         
 
-        if(targetDevice.TryGetFeatureValue(CommonUsages.primary2DAxis, out Vector2 primary2DAxisValue) && primary2DAxisValue != Vector2.zero)
+        if(rightHandDevice.TryGetFeatureValue(CommonUsages.primary2DAxis, out Vector2 primary2DAxisValue) && primary2DAxisValue != Vector2.zero)
         {
-            Debug.Log("Analog used!");
+            Debug.Log("Right Analog used!");
         }
+
+        if (leftHandDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool leftprimaryButtonValue) && leftprimaryButtonValue)
+        {
+            Debug.Log("Left Primary button clicked!");
+        }
+
     }
 }
