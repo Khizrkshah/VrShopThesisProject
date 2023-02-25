@@ -5,67 +5,77 @@ using UnityEngine.XR;
 
 public class HandPresence : MonoBehaviour
 {
+    public InputDeviceCharacteristics controllerCharacteristics;
+    public GameObject handModelPrefab;
+   
+    private InputDevice targetDevice;
+    private GameObject spawnedHandModel;
+    private Animator handAnimator;
 
-    private InputDevice rightHandDevice;
-    private InputDevice leftHandDevice;
 
     // Start is called before the first frame update
-    IEnumerator Start()
+     void Start()
+    {
+        Debug.Log("code is running.");
+        tryInitialize();
+    }
+
+    void tryInitialize()
     {
         var inputDevices = new List<InputDevice>();
-        InputDeviceCharacteristics rightControllerCharacteristics = InputDeviceCharacteristics.Right | InputDeviceCharacteristics.Controller;
-        //InputDeviceCharacteristics leftControlllerCharacteristics = InputDeviceCharacteristics.Left | InputDeviceCharacteristics.Controller;
-
-        Debug.Log("code is running.");
        
-        while (inputDevices.Count == 0)
-        {
-            // check for devices every frame until you find one.
-            yield return null;
-            InputDevices.GetDevicesWithCharacteristics(rightControllerCharacteristics, inputDevices);
-            //InputDevices.GetDevicesWithCharacteristics(leftControlllerCharacteristics, inputDevices);
-        }
+        InputDevices.GetDevicesWithCharacteristics(controllerCharacteristics, inputDevices);
+       
 
         foreach (var item in inputDevices)
         {
-            //   Debug.Log(item.name + item.characteristics);
             Debug.Log(string.Format(item.name + item.characteristics));
 
         }
 
         if (inputDevices.Count > 0)
         {
-            rightHandDevice = inputDevices[0];
-            //leftHandDevice = inputDevices[1];
+            targetDevice = inputDevices[0];
+            spawnedHandModel = Instantiate(handModelPrefab, transform);
+            handAnimator = spawnedHandModel.GetComponent<Animator>();
+
+
         }
+    }
+    void updateHandAnimation()
+    {
+        if (targetDevice.TryGetFeatureValue(CommonUsages.trigger, out float triggerValue))
+        {
+            handAnimator.SetFloat("Trigger", triggerValue);
+        }
+        else
+        {
+            handAnimator.SetFloat("Trigger", 0);
+        }
+
+        if (targetDevice.TryGetFeatureValue(CommonUsages.grip, out float gripValue))
+        {
+            handAnimator.SetFloat("Grip", gripValue);
+        }
+        else
+        {
+            handAnimator.SetFloat("Grip", 0);
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        if (rightHandDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool primaryButtonValue) && primaryButtonValue)
+
+        if (!targetDevice.isValid)
         {
-            Debug.Log("Pressing Right primary button");
+            tryInitialize();
+        } else
+        {
+            updateHandAnimation();
         }
 
-        
-        if(rightHandDevice.TryGetFeatureValue(CommonUsages.trigger, out float triggerValue) && triggerValue > 0.1f)
-        {
-            Debug.Log("Right Trigger pressed" + triggerValue);
-        }
-
-        
-
-        if(rightHandDevice.TryGetFeatureValue(CommonUsages.primary2DAxis, out Vector2 primary2DAxisValue) && primary2DAxisValue != Vector2.zero)
-        {
-            Debug.Log("Right Analog used!");
-        }
-
-        if (leftHandDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool leftprimaryButtonValue) && leftprimaryButtonValue)
-        {
-            Debug.Log("Left Primary button clicked!");
-        }
 
     }
 }

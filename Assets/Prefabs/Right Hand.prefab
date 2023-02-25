@@ -460,7 +460,7 @@ GameObject:
   - component: {fileID: 4647260834934501767}
   - component: {fileID: 730108864876506868}
   m_Layer: 0
-  m_Name: LeftHand
+  m_Name: Right Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -473,16 +473,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5419435329304881981}
-  m_LocalRotation: {x: -0.023927946, y: -0.24871498, z: 0.742427, w: 0.6215871}
+  m_LocalRotation: {x: 0.018884992, y: 0.20972246, z: -0.75345564, w: 0.62286794}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 549343816381758662}
   - {fileID: 960185506317064959}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 19.85, y: -21.5, z: 96.32}
+  m_LocalEulerAnglesHint: {x: 19.85, y: 14.33, z: -98.32}
 --- !u!95 &730108864876506868
 Animator:
   serializedVersion: 5
