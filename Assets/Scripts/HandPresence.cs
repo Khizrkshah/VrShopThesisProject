@@ -27,11 +27,11 @@ public class HandPresence : MonoBehaviour
         InputDevices.GetDevicesWithCharacteristics(controllerCharacteristics, inputDevices);
        
 
-        foreach (var item in inputDevices)
+        /*foreach (var item in inputDevices)
         {
-            Debug.Log(string.Format(item.name + item.characteristics));
+           Debug.Log(string.Format(item.name + item.characteristics));
 
-        }
+        }*/
 
         if (inputDevices.Count > 0)
         {
@@ -76,6 +76,7 @@ public class HandPresence : MonoBehaviour
             updateHandAnimation();
         }
 
+        
 
     }
 }
